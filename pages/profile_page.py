@@ -1,3 +1,4 @@
+from locators.feed_locators import FeedLocators
 from locators.profile_locators import ProfileLocators
 from pages.base_page import BasePage
 
@@ -30,7 +31,5 @@ class ProfilePage(BasePage):
         return self.find_visible(ProfileLocators.EMAIL_INPUT).get_attribute("value")
 
     def history_order_numbers(self) -> list[int]:
-        from locators.feed_locators import FeedLocators
-
         numbers = self.find_all_visible(FeedLocators.ORDER_NUMBERS)
         return [int(item.text.replace("#", "")) for item in numbers]

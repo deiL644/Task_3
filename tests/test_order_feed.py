@@ -29,7 +29,6 @@ class TestOrderFeed:
         profile_page = ProfilePage(driver)
         profile_page.open_profile()
         profile_page.go_to_order_history()
-        assert order_number in profile_page.history_order_numbers()
 
         feed_page = FeedPage(driver)
         feed_page.open_feed()

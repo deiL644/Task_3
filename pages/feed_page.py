@@ -46,11 +46,11 @@ class FeedPage(BasePage):
 
     def wait_order_in_progress(self, order_number: int) -> bool:
         return self.wait.until(
-            lambda _: str(order_number) in [item.text for item in self.driver.find_elements(*FeedLocators.IN_PROGRESS_NUMBERS)]
+            lambda _: str(order_number) in self.in_progress_numbers()
         )
 
     def in_progress_numbers(self) -> list[str]:
-        return [item.text for item in self.driver.find_elements(*FeedLocators.IN_PROGRESS_NUMBERS)]
+        return [item.text for item in self.find_all(FeedLocators.IN_PROGRESS_NUMBERS)]
 
     def wait_new_order_in_progress(self, previous_numbers: list[str]) -> bool:
         return self.wait.until(

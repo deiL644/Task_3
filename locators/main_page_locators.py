@@ -8,3 +8,10 @@ class MainPageLocators:
     ORDER_BUTTON = (By.XPATH, "//button[text()='Оформить заказ' or text()='Войти в аккаунт']")
     INGREDIENT_COUNTER = (By.CSS_SELECTOR, "p[class*='counter__num']")
     CONSTRUCTOR_ITEMS = (By.CSS_SELECTOR, "span[class*='BurgerConstructor_basket__listContainer'] li")
+
+    @staticmethod
+    def ingredient_card_by_name(name: str) -> tuple[str, str]:
+        return (
+            By.XPATH,
+            f"//a[contains(@class, 'BurgerIngredient_ingredient')][.//p[text()='{name}']]",
+        )

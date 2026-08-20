@@ -1,4 +1,3 @@
-from selenium.webdriver import ActionChains
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,11 +16,7 @@ class MainPage(BasePage):
         return self.find_visible(MainPageLocators.TITLE).is_displayed()
 
     def ingredient_card_by_name(self, name: str) -> WebElement:
-        locator = (
-            "xpath",
-            f"//a[contains(@class, 'BurgerIngredient_ingredient')][.//p[text()='{name}']]",
-        )
-        return self.find_visible(locator)
+        return self.find_visible(MainPageLocators.ingredient_card_by_name(name))
 
     def click_ingredient(self, name: str) -> None:
         self.ingredient_card_by_name(name).click()
@@ -41,10 +36,8 @@ class MainPage(BasePage):
     def drag_ingredient_to_constructor(self, name: str) -> None:
         source = self.ingredient_card_by_name(name)
         target = self.find_visible(MainPageLocators.CONSTRUCTOR)
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", source)
-        ActionChains(self.driver).move_to_element(source).pause(0.2).click_and_hold(source).pause(
-            0.5
-        ).move_to_element_with_offset(target, 100, 100).pause(0.5).release().perform()
+        self.scroll_to(source)
+        self.drag_and_drop_with_offset(source, target, 100, 100)
         try:
             self.wait.until(lambda _: self.ingredient_counter(name) > 0)
         except TimeoutException:
@@ -52,7 +45,7 @@ class MainPage(BasePage):
             self.wait.until(lambda _: self.ingredient_counter(name) > 0)
 
     def _html5_drag_and_drop(self, source: WebElement, target: WebElement) -> None:
-        self.driver.execute_script(
+        self.execute_script(
             """
             const source = arguments[0];
             const target = arguments[1];
@@ -80,7 +73,7 @@ class MainPage(BasePage):
         return int(self.find_visible(ModalLocators.ORDER_NUMBER).text)
 
     def constructor_has_items(self) -> bool:
-        return bool(self.driver.find_elements(*MainPageLocators.CONSTRUCTOR_ITEMS))
+        return bool(self.find_all(MainPageLocators.CONSTRUCTOR_ITEMS))
 
     def wait_order_modal_closed(self) -> None:
         self.wait.until(EC.invisibility_of_element_located(ModalLocators.OPENED_MODAL))

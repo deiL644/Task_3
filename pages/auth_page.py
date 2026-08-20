@@ -28,7 +28,7 @@ class AuthPage(BasePage):
     def is_password_input_active(self) -> bool:
         password_input = self.find_visible(AuthLocators.PASSWORD_INPUT)
         input_container = self.find_visible(AuthLocators.PASSWORD_INPUT_CONTAINER)
-        return self.driver.switch_to.active_element == password_input or (
+        return self.is_active_element(password_input) or (
             "input_status_active" in input_container.get_attribute("class")
         )
 

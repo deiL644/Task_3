@@ -10,7 +10,7 @@ class TestPasswordRecovery:
     @allure.title("Переход на страницу восстановления пароля")
     def test_open_recovery_page_from_login(self, driver):
         HeaderPage(driver).open("/")
-        HeaderPage(driver).go_to_account()
+        HeaderPage(driver).go_to_login()
 
         auth_page = AuthPage(driver)
         auth_page.click_recover_password_link()
